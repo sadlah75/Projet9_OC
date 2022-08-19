@@ -14,7 +14,7 @@
         android:drawableStart="@drawable/ic_camera"
         android:layout_weight="80"
         android:background="@drawable/custom_edit_text"
-        android:text="Add video"/>
+        android:text="@string/add_video"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/video_place_holder"

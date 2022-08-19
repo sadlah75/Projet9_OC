@@ -1,6 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_dialog_property_form"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_type"
+            style="@style/SpinnerTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="10dp"
+            android:entries="@array/property_type"/>
+
+        <!--Area-->
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner_type"
+            android:layout_margin="8dp"
+            android:background="@drawable/custom_edit_text"
+            android:hint="@string/area"
+            android:imeOptions="actionNext"
+            android:padding="10dp" />
+
+        <!--Price-->
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_text_area"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/custom_edit_text"
+            android:hint="@string/price"
+            android:inputType="number"
+            android:padding="10dp" />
+
+        <!--Surface-->
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_text_price"
+            android:layout_margin="8dp"
+            android:background="@drawable/custom_edit_text"
+            android:hint="@string/surface"
+            android:inputType="numberDecimal"
+            android:padding="10dp" />
+
+        <!--Numbers of each rooms-->
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_text_surface"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <!--Rooms-->
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_text_nb_rooms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="33"
+                android:background="@drawable/custom_edit_text"
+                android:hint="@string/rooms"
+                android:inputType="numberDecimal"
+                android:padding="10dp" />
+
+
+            <!--Bathrooms-->
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_text_nb_bathrooms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="33"
+                android:background="@drawable/custom_edit_text"
+                android:hint="@string/bathrooms"
+                android:inputType="numberDecimal"
+                android:padding="10dp" />
+
+            <!--Bedrooms-->
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_text_nb_bedrooms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="33"
+                android:background="@drawable/custom_edit_text"
+                android:hint="@string/bedrooms"
+                android:inputType="numberDecimal"
+                android:padding="10dp" />
+
+        </LinearLayout>
+
+        <!--Description-->
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_below="@+id/linearLayout1"
+            android:layout_margin="8dp"
+            android:background="@drawable/custom_edit_text"
+            android:hint="@string/description"
+            android:inputType="textMultiLine"
+            android:padding="10dp" />
+
+        <!--Address-->
+        <include
+            android:id="@+id/include_address"
+            layout="@layout/custom_address_displayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_text_description" />
+
+        <!--Date-->
+        <include
+            android:id="@+id/include_date"
+            layout="@layout/property_status_date_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_button" />
+
+        <!--Action button list-->
+
+        <include
+            android:id="@+id/include_button"
+            layout="@layout/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_address" />
+
+        <include
+            android:id="@+id/video_include"
+            layout="@layout/button_video_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_date" />
+
+        <!--Action button-->
+        <include
+            layout="@layout/action_button_layout"
+            android:id="@+id/include_button_save_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/video_include" />
+
+    </RelativeLayout>
 </ScrollView>

@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
+
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RealEstateManagerDatabase db = RealEstateManagerDatabase.getInstance(this);
         setContentView(R.layout.activity_main);
 
         this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);

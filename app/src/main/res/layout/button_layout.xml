@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:weightSum="100">
@@ -13,7 +14,7 @@
         android:background="@drawable/custom_edit_text"
         android:drawableStart="@drawable/ic_point_of_interest"
         android:padding="4dp"
-        android:text="Add POI" />
+        android:text="@string/add_poi"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_add_picture"
@@ -24,7 +25,5 @@
         android:background="@drawable/custom_edit_text"
         android:drawableStart="@drawable/ic_add_image"
         android:padding="4dp"
-        android:text="Add pictures" />
-
-
+        android:text="@string/add_pictures" />
 </LinearLayout>

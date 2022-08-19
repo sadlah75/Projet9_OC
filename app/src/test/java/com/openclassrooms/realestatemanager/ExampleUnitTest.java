@@ -24,12 +24,12 @@ public class ExampleUnitTest {
     // Conversions Dollars <> Euros
     @Test
     public void convertDollarToEuro_withSuccess() {
-        assertEquals(99,Utils.convertDollarToEuro(100));
+        assertEquals(81,Utils.convertDollarToEuro(100));
     }
 
     @Test
     public void convertEuroToDollar_withSuccess() {
-        assertEquals(101,Utils.convertEurosToDollars(100));
+        assertEquals(102,Utils.convertEurosToDollars(100));
     }
 
 

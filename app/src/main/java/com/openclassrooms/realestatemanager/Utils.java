@@ -3,13 +3,15 @@ package com.openclassrooms.realestatemanager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * Created by Philippe on 21/02/2018.
@@ -35,7 +37,7 @@ public class Utils {
      * @return
      */
     public static int convertEurosToDollars(int euros) {
-        return (int)Math.round(euros * 1.01);
+        return (int)Math.round(euros * 1.02);
     }
 
 
@@ -92,5 +94,15 @@ public class Utils {
         }
 
         return (wifiAvailable || networkMobileAvailable);
+    }
+
+
+    // Conversion d'un tableau de String vers une String
+    public static String arrayToString(List<String> strs) {
+        StringBuilder builder = new StringBuilder("");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            strs.forEach(s -> builder.append(s+","));
+        }
+        return builder.toString();
     }
 }

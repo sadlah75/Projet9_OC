@@ -5,46 +5,24 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!--Address-->
-    <!--<LinearLayout-->
-    <!--android:id="@+id/first_linear_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:weightSum="100">-->
-
-    <!--&lt;!&ndash;Number&ndash;&gt;-->
-    <!--<android.support.v7.widget.AppCompatEditText-->
-    <!--android:id="@+id/edit_text_address_number"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_margin="8dp"-->
-    <!--android:layout_weight="15"-->
-    <!--android:background="@drawable/custom_edit_text"-->
-    <!--android:hint="Nb"-->
-    <!--android:inputType="number"-->
-    <!--android:padding="10dp" />-->
-    <!---->
-
-    <!--</LinearLayout>-->
-
-    <!--Line1-->
+    <!--Address 1-->
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/edit_text_address_line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/custom_edit_text"
-        android:hint="Line 1"
+        android:hint="@string/address_1"
         android:padding="10dp" />
-    <!--Line2-->
+
+    <!--Address 2-->
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/edit_text_address_line2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/custom_edit_text"
-        android:hint="Line 2"
+        android:hint="@string/address_2"
         android:padding="10dp" />
 
     <!--City, State, Zip-->
@@ -63,7 +41,7 @@
             android:layout_margin="8dp"
             android:layout_weight="38"
             android:background="@drawable/custom_edit_text"
-            android:hint="City"
+            android:hint="@string/city"
             android:inputType="textCapWords|textAutoCorrect"
             android:padding="10dp" />
         <!--State-->
@@ -74,7 +52,7 @@
             android:layout_margin="8dp"
             android:layout_weight="38"
             android:background="@drawable/custom_edit_text"
-            android:hint="State"
+            android:hint="@string/state"
             android:inputType="textCapCharacters|textAutoCorrect"
             android:padding="10dp" />
 
@@ -86,11 +64,9 @@
             android:layout_margin="8dp"
             android:layout_weight="24"
             android:background="@drawable/custom_edit_text"
-            android:hint="Zip"
+            android:hint="@string/zip"
             android:inputType="textPostalAddress"
             android:padding="10dp" />
 
     </LinearLayout>
-
-
 </LinearLayout>

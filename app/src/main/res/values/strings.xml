@@ -1,4 +1,58 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
     <string name="description_property">Le premier bien immobilier enregistré vaut</string>
+
+    <string name="item_name">House</string>
+    <string name="item_location">Montreuil</string>
+    <string name="item_price">$20,000,000</string>
+
+    <!-- menu toolbar -->
+    <string name="add_button">Add</string>
+    <string name="search_button">Search</string>
+    <string name="update_button">Update</string>
+
+    <!-- Used in NavigationDrawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_settings">Settings</string>
+    <string name="navigation_drawer_logout">Logout</string>
+    <string name="map">Map</string>
+    <string name="navigation_drawer_username">Username</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="address_1">Address 1</string>
+    <string name="address_2">Address 2</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="zip">Zip</string>
+    <string name="add_video">Add video</string>
+    <string name="add_poi">Add POI</string>
+    <string name="add_pictures">Add pictures</string>
+    <string name="entry_date">Entry date</string>
+    <string name="sold_date">Sold date</string>
+    <string name="area">Area</string>
+    <string name="price">Price</string>
+    <string name="surface">Surface</string>
+    <string name="rooms">Rooms</string>
+    <string name="bathrooms">Bathrooms</string>
+    <string name="bedrooms">Bedrooms</string>
+    <string name="description">Description</string>
+    <string name="title_add_poi">Add points of interests</string>
+    <string name="add_picture">Add picture</string>
+    <string name="add">ADD</string>
+    <string name="toast_title_no_image_chosen">No image selected</string>
+    <string name="detail_media">Media</string>
+    <string name="number_of_bedrooms">Number of bedrooms</string>
+    <string name="bedroom_quantity">%1$d</string>
+    <string name="surface_size">%1$d sq m</string>
+    <string name="number_of_rooms">Number of rooms</string>
+    <string name="room_quantity">%1$d</string>
+    <string name="number_of_bathrooms">Number of bathrooms</string>
+    <string name="bathroom_quantity">%1$d</string>
+    <string name="country">Country</string>
+    <string name="zip_code">Zip code</string>
+    <string name="address">%1$s</string>
+    <string name="line2">Line2</string>
+    <string name="location">Location</string>
+    <string name="map_view">Map view</string>
 </resources>
