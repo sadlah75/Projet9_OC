@@ -7,6 +7,8 @@ import android.os.Build;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -104,5 +106,12 @@ public class Utils {
             strs.forEach(s -> builder.append(s+","));
         }
         return builder.toString();
+    }
+
+
+    // Conversion price au format x,xxxx,xxx
+    public static String getFormattedPrice(long price) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###",new DecimalFormatSymbols(Locale.US));
+        return decimalFormat.format(price);
     }
 }
