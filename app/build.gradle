@@ -52,4 +52,6 @@ dependencies {
     // For GSON
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    // For easy permission
+    implementation 'pub.devrel:easypermissions:2.0.1'
 }

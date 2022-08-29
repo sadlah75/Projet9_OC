@@ -15,10 +15,10 @@ import java.util.List;
 
 public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> {
 
-    private List<String> mPoiList;
+    private List<String> mPoiList = new ArrayList<>();
 
-    public PoiAdapter() {
-        this.mPoiList = new ArrayList<>();
+    public PoiAdapter(List<String> pois) {
+        mPoiList = pois;
     }
 
     @NonNull

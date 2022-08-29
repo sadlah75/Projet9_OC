@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.model;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
@@ -38,19 +39,14 @@ public class Property implements Serializable {
     private Date entryDate;
     private Date soldDate;
     private List<String> poi;
+    private String urlVideo;
+
 
     @Ignore
-    @Relation(
-            parentColumn = "id",
-            entityColumn = "propertyId"
-    )
-    private Address address;
+    private List<Address> address;
+
 
     @Ignore
-    @Relation(
-            parentColumn = "id",
-            entityColumn = "propertyId"
-    )
     private List<Photo> photos;
 
     /**
@@ -61,7 +57,7 @@ public class Property implements Serializable {
 
     public Property(String urlPicture,String type, String area,String description, long price, int surface,
                     int numberOfRoom,int numberOfBathroom, int numberOfBedroom,
-                    boolean isAvailable, Date entryDate, List<String> poi, Address address,
+                    boolean isAvailable, Date entryDate, Date soldDate, List<String> poi, String urlVideo,List<Address> address,
                     List<Photo> photos, long userId) {
         this.urlPicture = urlPicture;
         this.type = type;
@@ -74,8 +70,9 @@ public class Property implements Serializable {
         this.numberOfBedroom = numberOfBedroom;
         this.isAvailable = isAvailable;
         this.entryDate = entryDate;
-        this.soldDate = null;
+        this.soldDate = soldDate;
         this.poi = poi;
+        this.urlVideo = urlVideo;
         this.address = address;
         this.photos = photos;
         this.userId = userId;
@@ -191,12 +188,15 @@ public class Property implements Serializable {
         this.poi = poi;
     }
 
+    public void setUrlVideo(String urlVideo) { this.urlVideo = urlVideo; }
 
-    public Address getAddress() {
+    public String getUrlVideo() { return urlVideo; }
+
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 

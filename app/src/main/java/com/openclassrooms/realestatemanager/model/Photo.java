@@ -8,12 +8,14 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.ContentValues;
 
+import java.io.Serializable;
+
 @Entity(foreignKeys = @ForeignKey(entity = Property.class,
         parentColumns = "id",
         childColumns = "propertyId"),
         indices =  {@Index("propertyId")})
 
-public class Photo {
+public class Photo implements Serializable {
 
     /**
      * The unique identifier of the user

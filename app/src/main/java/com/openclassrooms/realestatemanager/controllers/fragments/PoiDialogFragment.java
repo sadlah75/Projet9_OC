@@ -31,6 +31,10 @@ public class PoiDialogFragment extends BaseDialogFragment<FragmentDialogPoiFormB
         return FragmentDialogPoiFormBinding.inflate(getLayoutInflater());
     }
 
+    public void setPoi(List<String> pois) {
+        mPoiList = pois;
+    }
+
     @Override
     public void init() {
         initAndShowGUI();
@@ -42,7 +46,7 @@ public class PoiDialogFragment extends BaseDialogFragment<FragmentDialogPoiFormB
         this.configureSpinner();
 
         // Init Listener
-        this.configureAddPoiListaner();
+        this.configureAddPoiListener();
         this.configureCancelListener();
         this.configureSaveListener();
     }
@@ -53,7 +57,7 @@ public class PoiDialogFragment extends BaseDialogFragment<FragmentDialogPoiFormB
         // elements are laid out.
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.recyclerViewObject.recyclerViewPoi.setLayoutManager(layoutManager);
-        mAdapterPoi = new PoiAdapter();
+        mAdapterPoi = new PoiAdapter(mPoiList);
         // Set CustomAdapter as the adapter for RecyclerView.
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(binding.getRoot().getContext(),
                 layoutManager.getOrientation());
@@ -69,7 +73,7 @@ public class PoiDialogFragment extends BaseDialogFragment<FragmentDialogPoiFormB
         }
     }
 
-    private void configureAddPoiListaner() {
+    private void configureAddPoiListener() {
         binding.poiButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,14 +98,12 @@ public class PoiDialogFragment extends BaseDialogFragment<FragmentDialogPoiFormB
 
     private void saveData() {
         if (mPoiList.size() > 0) {
-            // TO DO ---------
             mOnIputSelected.sendPOIData(mPoiList);
             Toast.makeText(getContext(), "Poi added successfully", Toast.LENGTH_SHORT).show();
             getDialog().dismiss();
         } else {
             Toast.makeText(getContext(), "Please add at least one item", Toast.LENGTH_SHORT).show();
         }
-
     }
 
 

@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.openclassrooms.realestatemanager.utils.Utils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +26,7 @@ public class ExampleUnitTest {
     // Conversions Dollars <> Euros
     @Test
     public void convertDollarToEuro_withSuccess() {
-        assertEquals(81,Utils.convertDollarToEuro(100));
+        assertEquals(81, Utils.convertDollarToEuro(100));
     }
 
     @Test

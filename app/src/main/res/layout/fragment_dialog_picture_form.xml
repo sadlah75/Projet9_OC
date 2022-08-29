@@ -20,8 +20,8 @@
         android:textStyle="bold" />
 
     <include
-        android:id="@+id/recycler_view_pictures"
         layout="@layout/fragment_picture_list"
+        android:id="@+id/recycler_view_pictures"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp" />

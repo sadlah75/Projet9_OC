@@ -9,11 +9,13 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.ContentValues;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 @Entity(foreignKeys = @ForeignKey(entity = Property.class,
         parentColumns = "id",
         childColumns = "propertyId"),
         indices =  {@Index("propertyId")})
-public class Address {
+public class Address implements Serializable {
     /**
      * The unique identifier of the user
      */

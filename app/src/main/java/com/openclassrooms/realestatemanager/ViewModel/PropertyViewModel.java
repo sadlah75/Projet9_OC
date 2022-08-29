@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel;
 import com.openclassrooms.realestatemanager.model.Address;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
 import com.openclassrooms.realestatemanager.model.User;
 import com.openclassrooms.realestatemanager.repositories.AddressDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PhotoDataRepository;
@@ -13,6 +14,7 @@ import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 import com.openclassrooms.realestatemanager.repositories.UserDataRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 
 public class PropertyViewModel extends ViewModel {
@@ -52,9 +54,9 @@ public class PropertyViewModel extends ViewModel {
         executor.execute(() -> {
             long propertyId = propertyDataSource.createProperty(property);
             // --- Insertion address ---
-            Address address = property.getAddress();
-            address.setPropertyId(propertyId);
-            addressDataSource.createAddress(address);
+            List<Address> address = property.getAddress();
+            address.get(0).setPropertyId(propertyId);
+            addressDataSource.createAddress(address.get(0));
 
             // --- Insertion List of photos ---
             List<Photo> photos = property.getPhotos();
@@ -62,16 +64,25 @@ public class PropertyViewModel extends ViewModel {
                 photo.setPropertyId(propertyId);
                 photoDataSource.createPhoto(photo);
             }
-
         });
     }
 
-    public LiveData<List<Property>> getPropertiesByUser(long userId) {
-        return propertyDataSource.getAllPropertiesByUser(userId);
+    public LiveData<List<PropertyAndAddressAndPhotos>> getPropertiesByUser(long userId) {
+        LiveData<List<PropertyAndAddressAndPhotos>> properties = propertyDataSource.getAllPropertiesByUser(userId);
+        return properties;
     }
 
     public void updateProperty(Property property) {
-        executor.execute(() -> propertyDataSource.updateProperty(property));
+        executor.execute(() -> {
+            // Update property
+            //propertyDataSource.updateProperty(property);
+
+            // Update photos
+            //photoDataSource.updatePhotos(property.getPhotos());
+
+            // Update address
+            addressDataSource.updateAddress(property.getAddress().get(0));
+        });
     }
 
 }

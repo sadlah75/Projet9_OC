@@ -25,4 +25,11 @@ public class PhotoDataRepository {
         return this.photoDAO.getPhotosByProperty(propertyId);
     }
 
+    // Update photo
+    public void updatePhotos(List<Photo> photos) {
+        for (Photo p : photos) {
+            photoDAO.updatePhoto(p);
+        }
+    }
+
 }

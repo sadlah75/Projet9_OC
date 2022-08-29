@@ -3,14 +3,12 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,29 +21,33 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ViewModel.PropertyViewModel;
+import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDialogForm;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyFragment;
 import com.openclassrooms.realestatemanager.databinding.ActivityPropertyBinding;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
 import com.openclassrooms.realestatemanager.model.User;
-
-import java.util.List;
+import com.openclassrooms.realestatemanager.utils.SharedPreferencesHelper;
 
 
 public class PropertyActivity extends BaseActivity<ActivityPropertyBinding> implements
         NavigationView.OnNavigationItemSelectedListener,PropertyFragment.OnItemClickListener {
 
+    public static final int USER_ID = 1;
     public static final String PROPERTY_DETAILS = "PropertyDetails";
     private static final String FRAGMENT_FORM_TAG = "PropertyDialogForm";
 
     private PropertyFragment mPropertyFragment;
+    private DetailFragment mDetailFragment;
+
     private PropertyViewModel mPropertyViewModel;
 
     // Variables : Navigation View HEADER
     private TextView mUsername;
     private ImageView mPicture;
-    public static final int USER_ID = 1;
+
+    private RecyclerView recyclerView;
 
 
 
@@ -56,18 +58,16 @@ public class PropertyActivity extends BaseActivity<ActivityPropertyBinding> impl
 
     @Override
     protected void init() {
+        recyclerView = findViewById(R.id.fragment_property_recyclerview);
+
         this.configureToolbar();
         this.configureDrawerLayout();
         this.configureNavigationView();
         this.configureNavigationHeader();
 
         this.displayPropertyFragment();
+        this.displayDetailFragment();
     }
-
-    private void updatePropertyList(List<Property> properties) {
-
-    }
-
 
     // -------------------------
     // Configuration
@@ -133,10 +133,11 @@ public class PropertyActivity extends BaseActivity<ActivityPropertyBinding> impl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add:
+                SharedPreferencesHelper.setActionPropertyMode(this,SharedPreferencesHelper.MODE_CREATE);
                 displayPropertyDialogForm();
                 return true;
             case R.id.menu_update:
-                Toast.makeText(this, "Item Update", Toast.LENGTH_SHORT).show();
+                configureCheckbox();
                 return true;
             case R.id.menu_search:
                 Toast.makeText(this, "Item Search", Toast.LENGTH_SHORT).show();
@@ -144,6 +145,13 @@ public class PropertyActivity extends BaseActivity<ActivityPropertyBinding> impl
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void configureCheckbox() {
+        SharedPreferencesHelper.setVisibility(this,
+                !SharedPreferencesHelper.isVisible(this));
+        PropertyFragment.mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -174,15 +182,35 @@ public class PropertyActivity extends BaseActivity<ActivityPropertyBinding> impl
     }
 
 
-    // Configure fragments
+    // -------------------
+    // FRAGMENTS
+    // -------------------
+
+
     private void displayPropertyFragment() {
+        // A - Get FragmentManager and try to find existing instance of fragment in FrameLayout container
         mPropertyFragment = (PropertyFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.activity_property_frame_layout);
+                .findFragmentById(R.id.frame_layout_property_activity);
 
         if(mPropertyFragment == null) {
-            mPropertyFragment = PropertyFragment.newInstance();
+            // B -- Create new property fragment
+            mPropertyFragment = new PropertyFragment();
+            // C - Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_property_frame_layout,mPropertyFragment)
+                    .add(R.id.frame_layout_property_activity,mPropertyFragment)
+                    .commit();
+        }
+    }
+
+    private void displayDetailFragment() {
+        mDetailFragment = (DetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.frame_layout_detail_activity);
+
+        // A - We only add DetailFragment in Tablet mode (If found frame_layout_detail_fragment)
+        if (mDetailFragment == null && findViewById(R.id.frame_layout_detail_activity) != null) {
+            mDetailFragment = new DetailFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.frame_layout_detail_activity,mDetailFragment)
                     .commit();
         }
     }
@@ -204,9 +232,17 @@ public class PropertyActivity extends BaseActivity<ActivityPropertyBinding> impl
 
     // --- Callback ---
     @Override
-    public void onItemClickSelected(Property property) {
-        Intent intent = new Intent(this,DetailActivity.class);
-        intent.putExtra(PROPERTY_DETAILS,property);
-        startActivity(intent);
+    public void onItemClickSelected(PropertyAndAddressAndPhotos property) {
+        if (SharedPreferencesHelper.getActionPropertyMode(this).equals(SharedPreferencesHelper.MODE_UPDATE)) {
+            displayPropertyDialogForm();
+        }else {
+            if(mDetailFragment != null) {
+                mDetailFragment.displayPropertyOnTablet(property);
+            }else {
+                Intent intent = new Intent(this, DetailActivity.class);
+                intent.putExtra(PROPERTY_DETAILS, property);
+                startActivity(intent);
+            }
+        }
     }
 }

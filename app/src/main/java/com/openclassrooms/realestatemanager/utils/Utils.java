@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -9,7 +9,9 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -99,15 +101,17 @@ public class Utils {
     }
 
 
-    // Conversion d'un tableau de String vers une String
-    public static String arrayToString(List<String> strs) {
-        StringBuilder builder = new StringBuilder("");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            strs.forEach(s -> builder.append(s+","));
-        }
-        return builder.toString();
+    public static String checkDigit(int number) {
+        return number <= 9 ? "0" + number : String.valueOf(number);
     }
 
+    public static Date getDateFromDatePicker(int day, int month, int year) throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String formatedDate = sdf.format(calendar.getTime());
+        return sdf.parse(formatedDate);
+    }
 
     // Conversion price au format x,xxxx,xxx
     public static String getFormattedPrice(long price) {

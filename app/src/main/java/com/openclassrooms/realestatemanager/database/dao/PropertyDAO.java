@@ -10,6 +10,7 @@ import android.arch.persistence.room.Update;
 import android.database.Cursor;
 
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface PropertyDAO {
 
     @Transaction
     @Query("SELECT * FROM Property WHERE userId = :userId")
-    LiveData<List<Property>> getPropertiesByUser(long userId);
+    LiveData<List<PropertyAndAddressAndPhotos>> getPropertiesByUser(long userId);
 
     @Query("SELECT * FROM Property WHERE userId = :userId")
     Cursor getPropertiesWithCursor(long userId);

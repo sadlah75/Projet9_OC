@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,31 +17,37 @@ import android.widget.Toast;
 
 import com.openclassrooms.realestatemanager.ViewModel.PropertyViewModel;
 import com.openclassrooms.realestatemanager.adapters.PropertyAdapter;
+import com.openclassrooms.realestatemanager.controllers.activities.PropertyActivity;
 import com.openclassrooms.realestatemanager.databinding.FragmentPropertyListBinding;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyFragment extends BaseFragment<FragmentPropertyListBinding>
-            implements PropertyAdapter.OnClickItemRecyclerViewListener{
+            implements PropertyAdapter.OnClickItemRecyclerViewListener {
 
     public static final int USER_ID = 1;
 
-    private ArrayList<Property> mProperties = new ArrayList<>();
+    private ArrayList<PropertyAndAddressAndPhotos> mProperties = new ArrayList<>();
     private PropertyViewModel propertyViewModel;
-    private PropertyAdapter mAdapter;
+    public static PropertyAdapter mAdapter;
 
+    // Declare callback
     private OnItemClickListener mOnItemClickListener;
+
+    public PropertyFragment() {}
 
     public static PropertyFragment newInstance() {
         return new PropertyFragment();
     }
 
-    // --- Interface ---
+
+    // Declare our interface that will be implemented by any container activity
     public interface OnItemClickListener {
-        void onItemClickSelected(Property property);
+        void onItemClickSelected(PropertyAndAddressAndPhotos property);
     }
 
     @Override
@@ -71,16 +78,16 @@ public class PropertyFragment extends BaseFragment<FragmentPropertyListBinding>
     private void configViewModel() {
         propertyViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(this.requireContext()))
                 .get(PropertyViewModel.class);
-        propertyViewModel.getPropertiesByUser(USER_ID).observe(this, new Observer<List<Property>>() {
+        propertyViewModel.getPropertiesByUser(USER_ID).observe(this, new Observer<List<PropertyAndAddressAndPhotos>>() {
             @Override
-            public void onChanged(@Nullable List<Property> properties) {
-                updatePropertyList(properties);
+            public void onChanged(@Nullable List<PropertyAndAddressAndPhotos> propertyAndAddressAndPhotos) {
+                updatePropertyList(propertyAndAddressAndPhotos);
             }
         });
     }
 
-    private void updatePropertyList(List<Property> properties) {
-        this.mProperties = (ArrayList<Property>) properties;
+    private void updatePropertyList(List<PropertyAndAddressAndPhotos> properties) {
+        this.mProperties = (ArrayList<PropertyAndAddressAndPhotos>) properties;
         updateProperties();
     }
 
@@ -95,7 +102,7 @@ public class PropertyFragment extends BaseFragment<FragmentPropertyListBinding>
     }
 
     @Override
-    public void OnClickItemRecyclerView(int position) {
+    public void onClickItemRecyclerView(int position) {
         mOnItemClickListener.onItemClickSelected(mProperties.get(position));
     }
 

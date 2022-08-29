@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.database.dao.PropertyDAO;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class PropertyDataRepository {
     }
 
     // get All properties by user
-    public LiveData<List<Property>> getAllPropertiesByUser(long userId) {
+    public LiveData<List<PropertyAndAddressAndPhotos>> getAllPropertiesByUser(long userId) {
         return this.propertyDAO.getPropertiesByUser(userId);
     }
 

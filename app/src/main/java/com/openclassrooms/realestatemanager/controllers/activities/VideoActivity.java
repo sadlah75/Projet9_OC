@@ -1,13 +1,35 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.net.Uri;
+import android.widget.MediaController;
 
-public class VideoActivity extends AppCompatActivity {
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
+import com.openclassrooms.realestatemanager.databinding.ActivityVideoBinding;
+
+public class VideoActivity extends BaseActivity<ActivityVideoBinding> {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video);
+    ActivityVideoBinding getViewBinding() {
+        return ActivityVideoBinding.inflate(getLayoutInflater());
+    }
+
+    @Override
+    protected void init() {
+        String urlVideoSelected = (String) getIntent().getSerializableExtra(DetailFragment.VIDEO_SELECTED);
+        launchVideo(urlVideoSelected);
+    }
+
+    private void launchVideo(String path) {
+        binding.activityVideoView.setVideoURI(Uri.parse(path));
+        MediaController mediaController = new MediaController(this);
+        binding.activityVideoView.setMediaController(mediaController);
+        mediaController.setAnchorView(binding.activityVideoView);
+
+        //Add media controller on video view
+        binding.activityVideoView.start();
+
+
+
     }
 }

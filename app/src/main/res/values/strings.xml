@@ -4,7 +4,7 @@
 
     <string name="item_name">House</string>
     <string name="item_location">Montreuil</string>
-    <string name="item_price">$20,000,000</string>
+    <string name="item_price">$%1$s</string>
 
     <!-- menu toolbar -->
     <string name="add_button">Add</string>
@@ -44,7 +44,7 @@
     <string name="detail_media">Media</string>
     <string name="number_of_bedrooms">Number of bedrooms</string>
     <string name="bedroom_quantity">%1$d</string>
-    <string name="surface_size">%1$d sq m</string>
+    <string name="surface_size">%1$d <b>m²</b></string>
     <string name="number_of_rooms">Number of rooms</string>
     <string name="room_quantity">%1$d</string>
     <string name="number_of_bathrooms">Number of bathrooms</string>
@@ -55,4 +55,7 @@
     <string name="line2">Line2</string>
     <string name="location">Location</string>
     <string name="map_view">Map view</string>
+    <string name="toast_title_no_video_chosen">No video  choosen</string>
+    <string name="no_description_to_display">No description to display</string>
+    <string name="popup_title_permission_files_access">Permission file access</string>
 </resources>
