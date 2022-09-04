@@ -241,7 +241,7 @@ public class PropertyActivity extends AppCompatActivity implements
         if (SharedPreferencesHelper.getActionPropertyMode(this).equals(SharedPreferencesHelper.MODE_UPDATE)) {
             displayPropertyDialogForm();
         }else {
-            if (mDetailFragment != null && findViewById(R.id.frame_layout_detail_activity) !=null) {
+            if (mDetailFragment != null && mDetailFragment.isVisible()) {
                 mDetailFragment.displayPropertyOnTablet(property);
             } else {
                 Intent intent = new Intent(this, DetailActivity.class);
