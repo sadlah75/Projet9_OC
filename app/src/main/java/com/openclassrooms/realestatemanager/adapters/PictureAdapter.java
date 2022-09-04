@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.openclassrooms.realestatemanager.App;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.Photo;
+import com.openclassrooms.realestatemanager.utils.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +21,15 @@ import java.util.List;
 public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHolder> {
 
     private List<Photo> mPhotoList = new ArrayList<>();
+    private final OnDeletePhotoListener mOnDeletePhoto;
 
-    public PictureAdapter(List<Photo> photos) {
+    public interface OnDeletePhotoListener {
+        void onDeletePhoto(Photo photo);
+    }
+
+    public PictureAdapter(List<Photo> photos, OnDeletePhotoListener mOnDeletePhoto) {
         mPhotoList = photos;
+        this.mOnDeletePhoto = mOnDeletePhoto;
     }
 
     @NonNull
@@ -40,6 +48,13 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.getPhoto());
         holder.getTitle().setText(photo.getTitle());
+
+        if(!SharedPreferencesHelper.getActionPropertyMode(App.getContext())
+                .equals(SharedPreferencesHelper.MODE_DETAIL)) {
+            holder.getDelete().setVisibility(View.VISIBLE);
+            holder.getDelete().setOnClickListener(view -> mOnDeletePhoto.onDeletePhoto(photo));
+        }
+
     }
 
     @Override
@@ -52,19 +67,29 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public static   class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView photo;
+        private ImageView delete;
         private TextView title;
 
-        public ImageView getPhoto() { return photo; }
-        public TextView getTitle() { return title; }
+        public ImageView getPhoto() {
+            return photo;
+        }
+
+        public ImageView getDelete() {
+            return delete;
+        }
+
+        public TextView getTitle() {
+            return title;
+        }
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             photo = (ImageView) itemView.findViewById(R.id.fragment_picture_item_image);
+            delete = (ImageView) itemView.findViewById(R.id.fragment_picture_item_delete);
             title = (TextView) itemView.findViewById(R.id.fragment_picture_item_title);
         }
     }
-
 }

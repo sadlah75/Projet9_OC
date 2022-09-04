@@ -2,10 +2,16 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.Html;
-import android.text.Spanned;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.adapters.PictureAdapter;
@@ -20,33 +26,39 @@ import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailFragment extends BaseFragment<FragmentDetailBinding> {
+public class DetailFragment extends Fragment {
 
     public static final String VIDEO_SELECTED = "video selected";
     private List<Photo> mPhotos = new ArrayList<>();
     private PictureAdapter mAdapter;
+    private PictureAdapter.OnDeletePhotoListener mOnDeletePhoto;
 
-    @Override
-    public FragmentDetailBinding getViewBinding() {
-        return FragmentDetailBinding.inflate(getLayoutInflater());
-    }
+    private FragmentDetailBinding binding;
 
     public DetailFragment() {}
 
-    public static DetailFragment newInstance() {
-        return new DetailFragment();
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentDetailBinding.inflate(getLayoutInflater());
+        initGUI();
+        return binding.getRoot();
     }
 
-    @Override
-    public void init() {
+    private void initGUI() {
         configureRecyclerView();
+        configureButtonBackListener();
         getPropertyFromDetailActivity();
+    }
+
+    private void configureButtonBackListener() {
+        binding.fragmentDetailReturn.setOnClickListener(view -> getActivity().finish());
     }
 
     private void configureRecyclerView() {
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        this.mAdapter = new PictureAdapter(mPhotos);
+        this.mAdapter = new PictureAdapter(mPhotos, mOnDeletePhoto);
         binding.recyclerViewFragment.recyclerViewPicture.setAdapter(this.mAdapter);
         binding.recyclerViewFragment.recyclerViewPicture.setLayoutManager(layoutManager);
     }
@@ -59,7 +71,6 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding> {
 
     private void displayPropertyDetails(PropertyAndAddressAndPhotos property) {
         Property p = property.property;
-
 
         binding.detailDescription.setText(p.getDescription());
         // --- Details rooms ---
@@ -92,14 +103,19 @@ public class DetailFragment extends BaseFragment<FragmentDetailBinding> {
     }
 
     public void displayPropertyOnTablet(PropertyAndAddressAndPhotos p) {
+        Log.i("onTablet","OK");
         binding.detailDescription.setText(p.property.getDescription());
 
-        String surface = getString(R.string.surface_size,p.property.getSurface());
-        binding.roomsDetailsLayout.detailSurfaceQuantity.setText(surface);
+        //String surface = getActivity().getString(R.string.surface_size,p.property.getSurface());
+        //binding.roomsDetailsLayout.detailSurfaceQuantity.setText(surface);
+
+        /*
 
         binding.roomsDetailsLayout.detailRoomsQuantity.setText(String.valueOf(p.property.getNumberOfRoom()));
         binding.roomsDetailsLayout.detailBathroomsQuantity.setText(String.valueOf(p.property.getNumberOfBathroom()));
         binding.roomsDetailsLayout.detailBedroomQuantity.setText(String.valueOf(p.property.getNumberOfBedroom()));
+        */
+
     }
 
     private void playVideo(String urlVideo) {

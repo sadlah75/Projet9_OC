@@ -9,6 +9,7 @@ public class SharedPreferencesHelper {
 
     public static final String MODE_CREATE = "MODE_CREATE";
     public static final String MODE_UPDATE = "MODE_UPDATE";
+    public static final String MODE_DETAIL = "MODE_DETAIL";
 
 
     // --- variables checkbox's visibility ---

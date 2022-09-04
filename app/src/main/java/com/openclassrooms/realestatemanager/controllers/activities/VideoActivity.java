@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.MediaController;
 
 import com.openclassrooms.realestatemanager.R;
@@ -15,7 +17,12 @@ public class VideoActivity extends BaseActivity<ActivityVideoBinding> {
     }
 
     @Override
-    protected void init() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init();
+    }
+
+    private void init() {
         String urlVideoSelected = (String) getIntent().getSerializableExtra(DetailFragment.VIDEO_SELECTED);
         launchVideo(urlVideoSelected);
     }
@@ -28,8 +35,6 @@ public class VideoActivity extends BaseActivity<ActivityVideoBinding> {
 
         //Add media controller on video view
         binding.activityVideoView.start();
-
-
 
     }
 }

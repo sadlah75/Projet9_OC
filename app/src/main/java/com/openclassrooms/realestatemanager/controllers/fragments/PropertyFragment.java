@@ -1,62 +1,55 @@
 package com.openclassrooms.realestatemanager.controllers.fragments;
 
-
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ViewModel.PropertyViewModel;
 import com.openclassrooms.realestatemanager.adapters.PropertyAdapter;
-import com.openclassrooms.realestatemanager.controllers.activities.PropertyActivity;
-import com.openclassrooms.realestatemanager.databinding.FragmentPropertyListBinding;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertyFragment extends BaseFragment<FragmentPropertyListBinding>
-            implements PropertyAdapter.OnClickItemRecyclerViewListener {
+public class PropertyFragment extends Fragment implements PropertyAdapter.OnClickItemRecyclerViewListener {
 
     public static final int USER_ID = 1;
 
     private ArrayList<PropertyAndAddressAndPhotos> mProperties = new ArrayList<>();
     private PropertyViewModel propertyViewModel;
     public static PropertyAdapter mAdapter;
+    private RecyclerView recyclerView;
 
     // Declare callback
     private OnItemClickListener mOnItemClickListener;
 
     public PropertyFragment() {}
 
-    public static PropertyFragment newInstance() {
-        return new PropertyFragment();
-    }
-
-
     // Declare our interface that will be implemented by any container activity
     public interface OnItemClickListener {
         void onItemClickSelected(PropertyAndAddressAndPhotos property);
     }
 
+    @Nullable
     @Override
-    public FragmentPropertyListBinding getViewBinding() {
-        return FragmentPropertyListBinding.inflate(getLayoutInflater());
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_property_list,container,false);
+        recyclerView = view.findViewById(R.id.fragment_property_recyclerview);
+        initGUI();
+        return view;
     }
 
-    @Override
-    public void init() {
+    public void initGUI() {
         this.initRecyclerView();
         this.configViewModel();
     }
@@ -66,13 +59,13 @@ public class PropertyFragment extends BaseFragment<FragmentPropertyListBinding>
         // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
         // elements are laid out.
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        binding.getRoot().setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
         mAdapter = new PropertyAdapter(mProperties,this);
         // Set CustomAdapter as the adapter for RecyclerView.
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(binding.getRoot().getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
-        binding.getRoot().addItemDecoration(dividerItemDecoration);
-        binding.getRoot().setAdapter(mAdapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setAdapter(mAdapter);
     }
 
     private void configViewModel() {
@@ -93,12 +86,6 @@ public class PropertyFragment extends BaseFragment<FragmentPropertyListBinding>
 
     private void updateProperties() {
         this.mAdapter.updateProperties(mProperties);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -124,5 +111,4 @@ public class PropertyFragment extends BaseFragment<FragmentPropertyListBinding>
             throw new ClassCastException(e.toString() + " must implement OnItemClickListener");
         }
     }
-
 }

@@ -75,14 +75,13 @@ public class PropertyViewModel extends ViewModel {
     public void updateProperty(Property property) {
         executor.execute(() -> {
             // Update property
-            //propertyDataSource.updateProperty(property);
+            propertyDataSource.updateProperty(property);
 
             // Update photos
             //photoDataSource.updatePhotos(property.getPhotos());
 
             // Update address
-            addressDataSource.updateAddress(property.getAddress().get(0));
+           // addressDataSource.updateAddress(property.getAddress().get(0));
         });
     }
-
 }

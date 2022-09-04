@@ -10,10 +10,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -71,7 +76,6 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
     DatePickerDialog.OnDateSetListener mEntryDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            month = month + 1;
             String date = Utils.checkDigit(month) + "/" + Utils.checkDigit(dayOfMonth) + "/" + year;
             //For displaying in the view
             binding.includeDate.editTextEntryDate.setText(date);
@@ -106,10 +110,14 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
         return FragmentDialogFormBinding.inflate(getLayoutInflater());
     }
 
+    @Nullable
     @Override
-    public void init() {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view =  super.onCreateView(inflater, container, savedInstanceState);
         initAndCreateGUI();
+        return view;
     }
+
 
     private void initAndCreateGUI() {
         this.configureViewModel();
@@ -330,6 +338,11 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
         binding.includeAddress.editTextAddressState.setText(address.getState());
         binding.includeAddress.editTextAddressZip.setText(address.getZip());
 
+        if(property.property.getEntryDate() != null) {
+            String dateFormatted = Utils.getFormattedDate(property.property.getEntryDate(),"dd/MM/yyyy");
+            binding.includeDate.editTextEntryDate.setText(dateFormatted);
+        }
+
 
         // For Pictures
         mPhotoList = property.photos;
@@ -391,7 +404,8 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
     private void addPropertyInDatabase() {
         Property property = getPropertyFromForm();
         if(property != null) {
-            if(SharedPreferencesHelper.getActionPropertyMode(App.getContext()).equals(SharedPreferencesHelper.MODE_UPDATE)) {
+            if(SharedPreferencesHelper.getActionPropertyMode(App.getContext())
+                    .equals(SharedPreferencesHelper.MODE_UPDATE)) {
                 int propertyId = SharedPreferencesHelper.getPosition(App.getContext());
                 property.setId(propertyId);
                 mPropertyViewModel.updateProperty(property);

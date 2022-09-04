@@ -10,30 +10,34 @@ import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment
 import com.openclassrooms.realestatemanager.databinding.ActivityDetailBinding;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
+import com.openclassrooms.realestatemanager.utils.SharedPreferencesHelper;
 
-public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
+public class DetailActivity extends AppCompatActivity {
 
     private DetailFragment mDetailFragment;
+    private ActivityDetailBinding binding;
 
     @Override
-    ActivityDetailBinding getViewBinding() {
-        return ActivityDetailBinding.inflate(getLayoutInflater());
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityDetailBinding.inflate(getLayoutInflater());
+
+        SharedPreferencesHelper.setActionPropertyMode(this,
+                SharedPreferencesHelper.MODE_DETAIL);
+        this.configureAndShowDetailFragment();
+        setContentView(binding.getRoot());
     }
+
+
 
     @Override
-    protected void init() {
-        getProperty();
-        displayDetailFragment();
+    protected void onResume() {
+        super.onResume();
+        this.updateDetailFragmentPropertyIntent();
     }
 
-    // retrieve property from PropertyActivity and send him to DetailFragment
-    private void getProperty() {
-        PropertyAndAddressAndPhotos property = (PropertyAndAddressAndPhotos) getIntent().getSerializableExtra(PropertyActivity.PROPERTY_DETAILS);
-        getIntent().putExtra(PropertyActivity.PROPERTY_DETAILS,property);
-    }
-
-
-    private void displayDetailFragment() {
+    private void configureAndShowDetailFragment() {
         // A - Get FragmentManager and try to find existing instance of fragment in FrameLayout container
         mDetailFragment = (DetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_layout_detail_activity);
@@ -45,5 +49,12 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
                     .add(R.id.frame_layout_detail_activity,mDetailFragment)
                     .commit();
         }
+    }
+
+    // retrieve property from PropertyActivity and send him to DetailFragment
+    private void updateDetailFragmentPropertyIntent() {
+        PropertyAndAddressAndPhotos property = (PropertyAndAddressAndPhotos) getIntent().getSerializableExtra(PropertyActivity.PROPERTY_DETAILS);
+        //getIntent().putExtra(PropertyActivity.PROPERTY_DETAILS,property);
+        mDetailFragment.displayPropertyOnTablet(property);
     }
 }

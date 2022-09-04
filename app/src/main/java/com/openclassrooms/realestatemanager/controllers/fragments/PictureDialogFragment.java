@@ -3,15 +3,19 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +30,8 @@ import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class PictureDialogFragment extends BaseDialogFragment<FragmentDialogPictureFormBinding> {
+public class PictureDialogFragment extends DialogFragment
+                                implements PictureAdapter.OnDeletePhotoListener{
 
     private static final int CONSTANT_SELECT_PHOTO = 200;
     private static final String TAG = "PictureDialogFragment";
@@ -38,18 +43,21 @@ public class PictureDialogFragment extends BaseDialogFragment<FragmentDialogPict
     private  List<Photo> mPhotos = new ArrayList<>();
     private Uri uriImageSelected;
     private OnInputSelected mOnIputSelected;
-
-    @Override
-    public FragmentDialogPictureFormBinding getViewBinding() {
-        return FragmentDialogPictureFormBinding.inflate(getLayoutInflater());
-    }
+    private FragmentDialogPictureFormBinding binding;
 
     public void setPhotos(List<Photo> photos) {
         mPhotos = photos;
     }
 
+    @Nullable
     @Override
-    public void init() {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentDialogPictureFormBinding.inflate(getLayoutInflater());
+        initGUI();
+        return binding.getRoot();
+    }
+
+    private void initGUI() {
         this.configureRecyclerView();
         this.initSelectPictureListener();
         this.initAddPictureListener();
@@ -61,7 +69,7 @@ public class PictureDialogFragment extends BaseDialogFragment<FragmentDialogPict
     private void configureRecyclerView() {
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        this.mAdapter = new PictureAdapter(mPhotos);
+        this.mAdapter = new PictureAdapter(mPhotos,this);
         binding.recyclerViewPictures.recyclerViewPicture.setAdapter(this.mAdapter);
         binding.recyclerViewPictures.recyclerViewPicture.setLayoutManager(layoutManager);
     }
@@ -174,6 +182,12 @@ public class PictureDialogFragment extends BaseDialogFragment<FragmentDialogPict
         } catch (ClassCastException e) {
             Log.e(TAG,"onAttach: ClassCastException : " + e.getMessage());
         }
+    }
+
+    @Override
+    public void onDeletePhoto(Photo photo) {
+        mPhotos.remove(photo);
+        updatePictures(mPhotos);
     }
 
     public interface OnInputSelected {

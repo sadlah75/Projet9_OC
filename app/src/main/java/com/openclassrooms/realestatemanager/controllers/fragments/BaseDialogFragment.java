@@ -12,7 +12,6 @@ import android.viewbinding.ViewBinding;
 public abstract class BaseDialogFragment < T extends ViewBinding> extends DialogFragment {
 
     public abstract T getViewBinding();
-    public abstract void init();
     protected T binding;
 
     @Nullable
@@ -23,7 +22,6 @@ public abstract class BaseDialogFragment < T extends ViewBinding> extends Dialog
 
     private View initBinding() {
         binding = getViewBinding();
-        init();
         return binding.getRoot();
     }
 }

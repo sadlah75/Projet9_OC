@@ -7,7 +7,6 @@ import android.viewbinding.ViewBinding;
 
 public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
     abstract T getViewBinding();
-    protected abstract void init();
     protected T binding;
 
     @Override
@@ -18,7 +17,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     private void initBinding() {
         binding = getViewBinding();
-        init();
         setContentView(binding.getRoot());
     }
 }
