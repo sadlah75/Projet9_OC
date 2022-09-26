@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ViewModel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
+import android.util.Log;
 
 import com.openclassrooms.realestatemanager.model.Address;
 import com.openclassrooms.realestatemanager.model.Photo;
@@ -72,16 +73,35 @@ public class PropertyViewModel extends ViewModel {
         return properties;
     }
 
+    public List<PropertyAndAddressAndPhotos> getAllPropertiesByUser(long userId) {
+        return propertyDataSource.getPropertiesByUser(userId);
+    }
+
     public void updateProperty(Property property) {
         executor.execute(() -> {
-            // Update property
-            propertyDataSource.updateProperty(property);
+            // Update address
+            Address address = property.getAddress().get(0);
+            address.setPropertyId(property.getId());
+            addressDataSource.updateAddress(address);
 
             // Update photos
-            //photoDataSource.updatePhotos(property.getPhotos());
+            List<Photo> photos = property.getPhotos();
+            for(Photo photo : property.getPhotos()) {
+                if(photo.getPropertyId() != property.getId()) {
+                    photo.setPropertyId(property.getId());
+                }
+            }
+            photoDataSource.updatePhotos(photos);
 
-            // Update address
-           // addressDataSource.updateAddress(property.getAddress().get(0));
+            // Update property
+            propertyDataSource.updateProperty(property);
         });
+    }
+
+    // Search property by criteria
+    public LiveData<List<PropertyAndAddressAndPhotos>> searchProperty(String type, String area, Integer minSurface, Integer maxSurface, Long minPrice, Long maxPrice,
+                                                       Integer minRoom, Integer maxRoom, long userId) {
+        return propertyDataSource.searchProperty(type, area, minSurface, maxSurface, minPrice, maxPrice,
+                minRoom, maxRoom, userId);
     }
 }

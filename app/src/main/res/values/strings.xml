@@ -20,6 +20,7 @@
     <string name="navigation_drawer_username">Username</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="search">Search</string>
     <string name="address_1">Address 1</string>
     <string name="address_2">Address 2</string>
     <string name="city">City</string>

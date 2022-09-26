@@ -34,6 +34,7 @@ public class DetailFragment extends Fragment {
     private PictureAdapter.OnDeletePhotoListener mOnDeletePhoto;
 
     private FragmentDetailBinding binding;
+    private PropertyAndAddressAndPhotos property;
 
     public DetailFragment() {}
 
@@ -52,7 +53,7 @@ public class DetailFragment extends Fragment {
     }
 
     private void configureButtonBackListener() {
-        binding.fragmentDetailReturn.setOnClickListener(view -> getActivity().finish());
+        binding.fragmentDetailReturn.setOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());
     }
 
     private void configureRecyclerView() {
@@ -64,9 +65,15 @@ public class DetailFragment extends Fragment {
     }
 
     private void getPropertyFromDetailActivity() {
-        PropertyAndAddressAndPhotos property = (PropertyAndAddressAndPhotos) getActivity().getIntent().
-                getSerializableExtra(PropertyActivity.PROPERTY_DETAILS);
-        displayPropertyDetails(property);
+
+        if(getArguments() != null) {
+            Bundle bundle = getArguments();
+            property = (PropertyAndAddressAndPhotos) bundle.getSerializable("toto");
+        }
+
+        if(property != null) {
+            displayPropertyDetails(property);
+        }
     }
 
     private void displayPropertyDetails(PropertyAndAddressAndPhotos property) {
@@ -103,24 +110,21 @@ public class DetailFragment extends Fragment {
     }
 
     public void displayPropertyOnTablet(PropertyAndAddressAndPhotos p) {
-        Log.i("onTablet","OK");
-        binding.detailDescription.setText(p.property.getDescription());
-
-        //String surface = getActivity().getString(R.string.surface_size,p.property.getSurface());
-        //binding.roomsDetailsLayout.detailSurfaceQuantity.setText(surface);
-
-        /*
-
-        binding.roomsDetailsLayout.detailRoomsQuantity.setText(String.valueOf(p.property.getNumberOfRoom()));
-        binding.roomsDetailsLayout.detailBathroomsQuantity.setText(String.valueOf(p.property.getNumberOfBathroom()));
-        binding.roomsDetailsLayout.detailBedroomQuantity.setText(String.valueOf(p.property.getNumberOfBedroom()));
-        */
-
+        displayPropertyDetails(p);
     }
 
     private void playVideo(String urlVideo) {
         Intent intent = new Intent(getContext(),VideoActivity.class);
         intent.putExtra(VIDEO_SELECTED,urlVideo);
         startActivity(intent);
+    }
+
+    public static DetailFragment newInstance(PropertyAndAddressAndPhotos property) {
+        DetailFragment detailFragment = new DetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("toto",property);
+        detailFragment.setArguments(bundle);
+
+        return detailFragment;
     }
 }

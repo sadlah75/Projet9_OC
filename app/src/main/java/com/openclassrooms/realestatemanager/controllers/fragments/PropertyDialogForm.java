@@ -15,12 +15,10 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -68,39 +66,35 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
     private List<Photo> mPhotoList = new ArrayList<>();
     private Uri mUriVideoSelected;
     private PropertyAndAddressAndPhotos mPropertyAndAddressAndPhotos;
+    private long mPropertyId;
+    private long mAdressId;
 
     private Date mEntryDate = null;
     private Date mSoldDate = null;
 
     // Listener
-    DatePickerDialog.OnDateSetListener mEntryDateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            String date = Utils.checkDigit(month) + "/" + Utils.checkDigit(dayOfMonth) + "/" + year;
-            //For displaying in the view
-            binding.includeDate.editTextEntryDate.setText(date);
-            // Set to database
-            try {
-                mEntryDate = Utils.getDateFromDatePicker(dayOfMonth, month, year);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+    DatePickerDialog.OnDateSetListener mEntryDateSetListener = (datePicker, year, month, dayOfMonth) -> {
+        String date = Utils.checkDigit(month) + "/" + Utils.checkDigit(dayOfMonth) + "/" + year;
+        //For displaying in the view
+        binding.includeDate.editTextEntryDate.setText(date);
+        // Set to database
+        try {
+            mEntryDate = Utils.getDateFromDatePicker(dayOfMonth, month, year);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     };
 
-    DatePickerDialog.OnDateSetListener mSoldDateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            month = month + 1;
-            String date = Utils.checkDigit(month) + "/" + Utils.checkDigit(dayOfMonth) + "/" + year;
-            //For displaying in the view
-            binding.includeDate.editTextSoldDate.setText(date);
-            // Set to database
-            try {
-                mSoldDate = Utils.getDateFromDatePicker(dayOfMonth, month, year);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+    DatePickerDialog.OnDateSetListener mSoldDateSetListener = (datePicker, year, month, dayOfMonth) -> {
+        month = month + 1;
+        String date = Utils.checkDigit(month) + "/" + Utils.checkDigit(dayOfMonth) + "/" + year;
+        //For displaying in the view
+        binding.includeDate.editTextSoldDate.setText(date);
+        // Set to database
+        try {
+            mSoldDate = Utils.getDateFromDatePicker(dayOfMonth, month, year);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     };
 
@@ -123,7 +117,7 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
         this.configureViewModel();
         this.configureSpinner();
 
-        if(SharedPreferencesHelper.getActionPropertyMode(getActivity()).equals("MODE_UPDATE")) {
+        if(SharedPreferencesHelper.getActionPropertyMode(Objects.requireNonNull(getActivity())).equals("MODE_UPDATE")) {
             initPropertyViewModel();
             binding.includeDate.editTextSoldDate.setEnabled(true);
         }
@@ -246,7 +240,7 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog entryDialog = new DatePickerDialog(getContext(),android.R.style.Theme_Holo_Dialog_MinWidth,
+        DatePickerDialog entryDialog = new DatePickerDialog(Objects.requireNonNull(getContext()),android.R.style.Theme_Holo_Dialog_MinWidth,
                 mSoldDateSetListener,year,month,day);
         if(entryDialog.getWindow() != null) {
             entryDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -313,8 +307,15 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
 
     // Update Property's Data
     private void updateUIFromProperty(PropertyAndAddressAndPhotos property) {
+
         // For property
         Property p = property.property;
+        mPropertyId = p.getId();
+        // For Address
+        mAdressId = property.address.get(0).getId();
+        // For Photos
+
+
         // Configure the spinner
         List<String> types = Arrays.asList(getResources().getStringArray(R.array.property_type));
         int indexOfType = types.indexOf(property.property.getType());
@@ -375,7 +376,7 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
         String type = binding.spinnerType.getSelectedItem().toString();
 
 
-        Boolean result = !area.equals("") && !description.equals("") && !price.equals("") && !surface.equals("") && !nbRooms.equals("") &&
+        Boolean result = !type.equals("") && !area.equals("") && !description.equals("") && !price.equals("") && !surface.equals("") && !nbRooms.equals("") &&
                 !nbBathrooms.equals("") && !nbBedrooms.equals("") &&
                 !addr1.equals("") && !city.equals("") && !state.equals("") && !zip.equals("")
                 && !mPoiList.isEmpty()
@@ -402,12 +403,16 @@ public class PropertyDialogForm extends BaseDialogFragment<FragmentDialogFormBin
     }
 
     private void addPropertyInDatabase() {
-        Property property = getPropertyFromForm();
-        if(property != null) {
-            if(SharedPreferencesHelper.getActionPropertyMode(App.getContext())
-                    .equals(SharedPreferencesHelper.MODE_UPDATE)) {
-                int propertyId = SharedPreferencesHelper.getPosition(App.getContext());
-                property.setId(propertyId);
+        SharedPreferencesHelper.setVisibility(App.getContext(),false);
+                mAdapter.notifyDataSetChanged();
+                Property property = getPropertyFromForm();
+                if(property != null) {
+                    if(SharedPreferencesHelper.getActionPropertyMode(App.getContext())
+                            .equals(SharedPreferencesHelper.MODE_UPDATE)) {
+                        // here BUG
+                        //int propertyId = SharedPreferencesHelper.getPosition(App.getContext());
+                        property.setId(mPropertyId);
+                        property.getAddress().get(0).setId(mAdressId);
                 mPropertyViewModel.updateProperty(property);
             }else {
                 mPropertyViewModel.createProperty(property);

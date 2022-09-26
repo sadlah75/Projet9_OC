@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.adapters;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.ViewHo
     private List<PropertyAndAddressAndPhotos> mProperties;
 
     private final OnClickItemRecyclerViewListener mListener;
+    private List<View> mListOfViews = new ArrayList<>();
 
     /**
      * The listener for when a property needs to be displayed
@@ -65,6 +67,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.ViewHo
     public PropertyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_property_item,parent,false);
+        mListOfViews.add(view);
         SharedPreferencesHelper.setActionPropertyMode(App.getContext(),"MODE_INIT");
         return new ViewHolder(view);
     }
@@ -85,6 +88,14 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.ViewHo
                 Utils.getFormattedPrice(property.getPrice()));
         holder.getPrice().setText(priceFormatted);
         holder.itemView.setOnClickListener(view -> {
+            for (View tempItemView : mListOfViews) {
+                if(mListOfViews.get(holder.getAdapterPosition()) == tempItemView) {
+                    tempItemView.setBackgroundResource(R.color.colorSelected);
+                }else {
+                    tempItemView.setBackgroundResource(R.color.colorDefault);
+                }
+            }
+            
             mListener.onClickItemRecyclerView(holder.getAdapterPosition());
             SharedPreferencesHelper.setActionPropertyMode(App.getContext(),"MODE_DETAILS");
         });

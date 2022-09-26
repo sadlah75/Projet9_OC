@@ -1,6 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="15dp"
+    android:orientation="vertical"
+    tools:context=".controllers.fragments.SearchDialogFragment">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/poi_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:background="@drawable/rectangle"
+        android:padding="15dp"
+        android:text="Enter your criteria"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_type"
+            style="@style/SpinnerTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="50"
+            android:padding="10dp"
+            android:entries="@array/property_type"/>
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="50"
+            android:background="@drawable/custom_edit_text"
+            android:hint="Area"
+            android:padding="10dp" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_surface_min"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="50"
+            android:background="@drawable/custom_edit_text"
+            android:hint="Surface min"
+            android:inputType="number"
+            android:padding="10dp" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_surface_max"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="50"
+            android:background="@drawable/custom_edit_text"
+            android:hint="Surface max"
+            android:inputType="number"
+            android:padding="10dp" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_price_min"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="50"
+            android:background="@drawable/custom_edit_text"
+            android:hint="Price min"
+            android:inputType="number"
+            android:padding="10dp" />
+
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_price_max"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="50"
+            android:background="@drawable/custom_edit_text"
+            android:hint="Price max"
+            android:inputType="number"
+            android:padding="10dp" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_room_min"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="50"
+            android:background="@drawable/custom_edit_text"
+            android:hint="Room min"
+            android:inputType="number"
+            android:padding="10dp" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/search_room_max"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="50"
+            android:background="@drawable/custom_edit_text"
+            android:hint="Room max"
+            android:inputType="number"
+            android:padding="10dp" />
+
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end|bottom"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/action_button_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_weight="50"
+            android:text="@string/search"
+            android:textStyle="bold"
+            android:textAllCaps="false" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/action_button_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_weight="50"
+            android:text="@string/cancel"
+            android:textStyle="bold"
+            android:textAllCaps="false" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+</LinearLayout>
+

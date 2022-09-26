@@ -13,4 +13,7 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000</color>
     -->
+
+    <color name="colorSelected">#303F9F</color>
+    <color name="colorDefault">#FFFFFF</color>
 </resources>

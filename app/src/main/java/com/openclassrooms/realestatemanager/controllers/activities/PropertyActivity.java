@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,16 +23,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.openclassrooms.realestatemanager.App;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.ViewModel.PropertyViewModel;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyDialogForm;
 import com.openclassrooms.realestatemanager.controllers.fragments.PropertyFragment;
+import com.openclassrooms.realestatemanager.controllers.fragments.SearchDialogFragment;
 import com.openclassrooms.realestatemanager.databinding.ActivityPropertyBinding;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.PropertyAndAddressAndPhotos;
 import com.openclassrooms.realestatemanager.model.User;
 import com.openclassrooms.realestatemanager.utils.SharedPreferencesHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PropertyActivity extends AppCompatActivity implements
@@ -40,9 +46,12 @@ public class PropertyActivity extends AppCompatActivity implements
     public static final int USER_ID = 1;
     public static final String PROPERTY_DETAILS = "PropertyDetails";
     private static final String FRAGMENT_FORM_TAG = "PropertyDialogForm";
+    private static final String FRAGMENT_SEARCH_TAG = "SearchDialogForm";
 
     private PropertyFragment mPropertyFragment;
     private DetailFragment mDetailFragment;
+    private List<PropertyAndAddressAndPhotos> mProperties = new ArrayList<>();
+    private PropertyAndAddressAndPhotos mProperty;
 
     private PropertyViewModel mPropertyViewModel;
 
@@ -60,12 +69,11 @@ public class PropertyActivity extends AppCompatActivity implements
         setContentView(binding.getRoot());
 
         init();
-
     }
 
     protected void init() {
         recyclerView = findViewById(R.id.fragment_property_recyclerview);
-
+        this.configureViewModel();
         this.configureToolbar();
         this.configureDrawerLayout();
         this.configureNavigationView();
@@ -73,6 +81,11 @@ public class PropertyActivity extends AppCompatActivity implements
         
         this.configureAndShowPropertyFragment();
         this.configureAndShowDetailFragment();
+    }
+
+    private void configureViewModel() {
+        mPropertyViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(this))
+                .get(PropertyViewModel.class);
     }
 
     // -------------------------
@@ -112,8 +125,6 @@ public class PropertyActivity extends AppCompatActivity implements
 
     // Get current user
     private void getCurrentUser(int userId) {
-        mPropertyViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(this))
-                .get(PropertyViewModel.class);
         mPropertyViewModel.init(USER_ID);
         mPropertyViewModel.getUser(USER_ID).observe(this, user -> updateHeaderUser(user));
     }
@@ -146,7 +157,7 @@ public class PropertyActivity extends AppCompatActivity implements
                 configureCheckbox();
                 return true;
             case R.id.menu_search:
-                Toast.makeText(this, "Item Search", Toast.LENGTH_SHORT).show();
+                displaySearchDialogForm();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -160,12 +171,22 @@ public class PropertyActivity extends AppCompatActivity implements
         PropertyFragment.mAdapter.notifyDataSetChanged();
     }
 
+    private void displaySearchDialogForm() {
+        SearchDialogFragment searchDialogForm = new SearchDialogFragment();
+        searchDialogForm.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Dialog_FullScreen);
+        searchDialogForm.show(getSupportFragmentManager(), FRAGMENT_SEARCH_TAG);
+    }
+
     @Override
     public void onBackPressed() {
         if(binding.activityPropertyDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.activityPropertyDrawerLayout.closeDrawer(GravityCompat.START);
         }else {
-            super.onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                super.onBackPressed();
+            } else {
+                getSupportFragmentManager().popBackStack();
+            }
         }
     }
 
@@ -211,12 +232,11 @@ public class PropertyActivity extends AppCompatActivity implements
         mDetailFragment = (DetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frame_layout_detail_activity);
         // A - We only add DetailFragment in Tablet mode (If found frame_layout_detail_fragment)
-        Log.i("detail","result 1: " + String.valueOf(mDetailFragment == null));
-        Log.i("detail","result 2: " + String.valueOf( findViewById(R.id.frame_layout_detail_activity) != null));
         if (mDetailFragment == null && findViewById(R.id.frame_layout_detail_activity) != null) {
-            mDetailFragment = new DetailFragment();
+            mDetailFragment = DetailFragment.newInstance(mProperty);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.frame_layout_detail_activity,mDetailFragment);
+                    .add(R.id.frame_layout_detail_activity,mDetailFragment)
+                    .commit();
         }
     }
 
@@ -238,15 +258,19 @@ public class PropertyActivity extends AppCompatActivity implements
     // --- Callback ---
     @Override
     public void onItemClickSelected(PropertyAndAddressAndPhotos property) {
+        mProperty = property;
+
         if (SharedPreferencesHelper.getActionPropertyMode(this).equals(SharedPreferencesHelper.MODE_UPDATE)) {
             displayPropertyDialogForm();
         }else {
             if (mDetailFragment != null && mDetailFragment.isVisible()) {
                 mDetailFragment.displayPropertyOnTablet(property);
             } else {
-                Intent intent = new Intent(this, DetailActivity.class);
-                intent.putExtra(PROPERTY_DETAILS, property);
-                startActivity(intent);
+                mDetailFragment = DetailFragment.newInstance(property);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame_layout_property_activity,mDetailFragment)
+                            .addToBackStack(null)
+                            .commit();
             }
         }
     }

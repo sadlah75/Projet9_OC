@@ -30,8 +30,19 @@ public class PropertyDataRepository {
         return this.propertyDAO.getPropertiesByUser(userId);
     }
 
+    public List<PropertyAndAddressAndPhotos> getPropertiesByUser(long userId) {
+        return this.propertyDAO.getAllPropertiesByUser(userId);
+    }
+
     // Update property
     public int updateProperty(Property property) {
         return this.propertyDAO.updateProperty(property);
+    }
+
+    // Search Property by criteria
+    public LiveData<List<PropertyAndAddressAndPhotos>> searchProperty(String type, String area, Integer minSurface, Integer maxSurface, Long minPrice, Long maxPrice,
+                                                       Integer minRoom, Integer maxRoom, long userId) {
+        return this.propertyDAO.searchProperty(type, area, minSurface, maxSurface, minPrice, maxPrice,
+                minRoom, maxRoom, userId);
     }
 }
